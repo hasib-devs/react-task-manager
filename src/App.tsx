@@ -1,8 +1,8 @@
 import "./App.css";
-import TaskBoard from "./components/TaskBoard";
+import TaskManager from "./components/TaskManager";
 
 function App() {
-  return <TaskBoard />;
+  return <TaskManager />;
 }
 
 export default App;

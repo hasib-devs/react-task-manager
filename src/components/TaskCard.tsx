@@ -1,14 +1,16 @@
 import { useDrop } from "react-dnd";
 import { TaskStatus, TaskType } from "../types";
 import Taskitem from "./Taskitem";
+import { useTaskContext } from "../hooks";
 
 type Props = {
   status: string;
-  data: TaskType[];
-  moveTask: (task: TaskType, status: TaskStatus) => void;
 };
 
-const TaskCard = ({ status, data, moveTask }: Props) => {
+const TaskCard = ({ status }: Props) => {
+  const { moveTask, getTasksByStatus } = useTaskContext();
+  const tasks = getTasksByStatus(status as TaskStatus);
+
   const [{ isOver }, dropRef] = useDrop(() => {
     return {
       accept: Object.values(TaskStatus),
@@ -44,7 +46,7 @@ const TaskCard = ({ status, data, moveTask }: Props) => {
             ...onDropOverStyle(),
           }}
         >
-          {data.map((task) => (
+          {tasks.map((task) => (
             <Taskitem key={task.id} task={task} />
           ))}
         </div>

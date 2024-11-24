@@ -20,7 +20,7 @@ const Taskitem = ({ task }: Props) => {
   return (
     <div className="cursor-move" ref={dragRef} style={{ opacity }}>
       <div className="bg-white rounded-lg p-4">
-        <h4 className="text-lg">{task.title}</h4>
+        <h4 className="text-lg">{task.name}</h4>
         <p className="text-sm">{task.description}</p>
       </div>
     </div>

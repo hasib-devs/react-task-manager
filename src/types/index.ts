@@ -6,7 +6,9 @@ export enum TaskStatus {
 
 export type TaskType = {
   id: number;
-  title: string;
+  name: string;
   description: string;
   status: TaskStatus;
 };
+
+export type TaskCreateType = Pick<TaskType, "name" | "description">;
