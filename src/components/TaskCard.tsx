@@ -35,8 +35,11 @@ const TaskCard = ({ status }: Props) => {
   return (
     <>
       <div className="flex flex-col">
-        <h3 className="p-4 border-b text-xl bg-white capitalize">
-          {status.replace("-", " ")}
+        <h3 className="p-4 border-b text-xl bg-white capitalize flex items-center gap-3">
+          <span>{status.replace("-", " ")}</span>
+          <span className="bg-gray-200 text-gray-600 text-sm rounded-full px-2 ml-2">
+            {tasks.length}
+          </span>
         </h3>
 
         <div
