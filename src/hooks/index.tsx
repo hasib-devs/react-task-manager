@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useState } from "react";
 import { TaskContext } from "../contexts/task-context";
 
 export function useTaskContext() {
@@ -16,42 +9,45 @@ export function useTaskContext() {
   return context;
 }
 
-type InitialValueType<T> = T | (() => T);
-
-export function useLocalStorage<T>(
-  key: string,
-  initialValue: InitialValueType<T>,
-  { serialize = JSON.stringify, deserialize = JSON.parse } = {}
-): [T, Dispatch<SetStateAction<T>>] {
+export function useLocalStorage<T>(key: string, initialValue: T) {
+  // State to store the value
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
-      const item = window.localStorage.getItem(key);
-      if (item) {
-        return deserialize(item);
-      }
-
-      return initialValue instanceof Function ? initialValue() : initialValue;
+      // Check if the key exists in localStorage
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.error(error);
+      console.error("Error reading from localStorage:", error);
       return initialValue;
     }
   });
 
-  const prevKeyRef = useRef(key);
+  // Function to update the value in state and localStorage
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      // Allow value to be a function for functional updates
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+      // Save state
+      setStoredValue(valueToStore);
+      // Save to localStorage
+      localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error("Error writing to localStorage:", error);
+    }
+  };
 
-  // Use useEffect to update localstorage when value changes
+  // Sync state with localStorage if `key` changes
   useEffect(() => {
     try {
-      if (prevKeyRef.current !== key) {
-        window.localStorage.removeItem(prevKeyRef.current);
+      const item = localStorage.getItem(key);
+      if (item) {
+        setStoredValue(JSON.parse(item));
       }
-
-      prevKeyRef.current = key;
-      window.localStorage.setItem(key, serialize(storedValue));
     } catch (error) {
-      console.error(error);
+      console.error("Error reading from localStorage on key change:", error);
     }
-  }, [storedValue, serialize, key]);
+  }, [key]);
 
-  return [storedValue, setStoredValue];
+  return [storedValue, setValue] as const;
 }
