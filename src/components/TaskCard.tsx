@@ -27,7 +27,7 @@ const TaskCard = ({ status }: Props) => {
 
   const onDropOverStyle = () => {
     return {
-      border: isOver ? "1px dashed black" : undefined,
+      border: isOver || !tasks.length ? "1px dashed black" : undefined,
       opacity: isOver ? 0.8 : 1,
     };
   };
