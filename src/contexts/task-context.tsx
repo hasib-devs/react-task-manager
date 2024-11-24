@@ -16,36 +16,7 @@ export const TaskContext = createContext<TaskContextType | undefined>(
 );
 
 export const TaskProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", [
-    {
-      id: 1,
-      name: "Task One",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum, unde?",
-      status: TaskStatus.Todo,
-    },
-    {
-      id: 2,
-      name: "Task Two",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum, unde?",
-      status: TaskStatus.Completed,
-    },
-    {
-      id: 3,
-      name: "Task Three",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum, unde?",
-      status: TaskStatus.Todo,
-    },
-    {
-      id: 4,
-      name: "Task Four",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum, unde?",
-      status: TaskStatus.InProgress,
-    },
-  ]);
+  const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", []);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -54,9 +25,9 @@ export const TaskProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }
 
   function moveTask(task: TaskType, status: TaskStatus) {
-    setTasks((prevTasks) => {
-      return prevTasks.map((t) => (t.id === task.id ? { ...t, status } : t));
-    });
+    setTasks((prevTasks) =>
+      prevTasks.map((t) => (t.id === task.id ? { ...t, status } : t))
+    );
   }
 
   function createTask(task: TaskCreateType) {

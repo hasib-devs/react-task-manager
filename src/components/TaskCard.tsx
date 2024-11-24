@@ -4,12 +4,12 @@ import Taskitem from "./Taskitem";
 import { useTaskContext } from "../hooks";
 
 type Props = {
-  status: string;
+  status: TaskStatus;
 };
 
 const TaskCard = ({ status }: Props) => {
   const { moveTask, getTasksByStatus } = useTaskContext();
-  const tasks = getTasksByStatus(status as TaskStatus);
+  const tasks = getTasksByStatus(status);
 
   const [{ isOver }, dropRef] = useDrop(() => {
     return {
@@ -27,7 +27,7 @@ const TaskCard = ({ status }: Props) => {
 
   const onDropOverStyle = () => {
     return {
-      border: isOver || !tasks.length ? "1px dashed black" : undefined,
+      border: isOver ? "1px dashed black" : undefined,
       opacity: isOver ? 0.8 : 1,
     };
   };
@@ -49,6 +49,10 @@ const TaskCard = ({ status }: Props) => {
             ...onDropOverStyle(),
           }}
         >
+          {tasks.length === 0 && (
+            <div className="text-sm text-gray-500">No tasks here</div>
+          )}
+
           {tasks.map((task) => (
             <Taskitem key={task.id} task={task} />
           ))}

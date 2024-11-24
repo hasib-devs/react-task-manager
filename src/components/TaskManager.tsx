@@ -5,11 +5,11 @@ import TaskBoard from "./TaskBoard";
 
 const TaskManager = () => {
   return (
-    <TaskProvider>
-      <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend}>
+      <TaskProvider>
         <TaskBoard />
-      </DndProvider>
-    </TaskProvider>
+      </TaskProvider>
+    </DndProvider>
   );
 };
 
