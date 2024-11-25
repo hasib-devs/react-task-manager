@@ -11,11 +11,19 @@ const TaskCard = ({ status }: Props) => {
   const { moveTask, getTasksByStatus } = useTaskContext();
   const tasks = getTasksByStatus(status);
 
+  function handleMove(item: { task: TaskType; type: TaskStatus }) {
+    moveTask(item.task, status as TaskStatus);
+  }
+
   const [{ isOver }, dropRef] = useDrop(() => {
     return {
       accept: Object.values(TaskStatus),
-      drop(item: { task: TaskType; type: TaskStatus }) {
-        moveTask(item.task, status as TaskStatus);
+      drop(item: { task: TaskType; type: TaskStatus }, monitor) {
+        const didDrop = monitor.didDrop();
+        if (didDrop) {
+          return;
+        }
+        handleMove(item);
       },
       collect(monitor) {
         return {

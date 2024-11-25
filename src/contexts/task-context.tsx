@@ -1,6 +1,5 @@
 import { createContext, FC, ReactNode, useState } from "react";
 import { TaskCreateType, TaskStatus, TaskType } from "../types";
-import { useLocalStorage } from "../hooks";
 
 type TaskContextType = {
   tasks: TaskType[];
@@ -16,7 +15,7 @@ export const TaskContext = createContext<TaskContextType | undefined>(
 );
 
 export const TaskProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", [
+  const [tasks, setTasks] = useState<TaskType[]>([
     {
       id: 1,
       name: "Task One",
